@@ -1,0 +1,22 @@
+<!-- app/templates/login.html -->
+{% extends "_inc.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="max-w-md bg-white p-8 rounded-md shadow-md">
+        <h1 class="text-4xl font-bold mb-8">Login</h1>
+        <form action="{{ url_for('login') }}" method="post">
+            {{ form.csrf_token }}
+            <div class="mb-4">
+                {{ form.username.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.username(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <div class="mb-8">
+                {{ form.password.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.password(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

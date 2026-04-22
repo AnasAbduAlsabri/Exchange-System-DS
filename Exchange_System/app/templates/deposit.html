@@ -1,0 +1,29 @@
+<!-- في ملف templates/deposit.html -->
+{% extends "_inc.html" %}
+
+{% block title %}Deposit - Exchange System{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="bg-white p-8 shadow-md rounded-md w-96">
+        <h2 class="text-3xl font-bold mb-4">Deposit Money</h2>
+
+        <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="mb-4">
+                <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">Amount</label>
+                <input type="text" id="amount" name="amount" class="w-full p-2 border rounded-md" value="{{ form.amount.data }}">
+
+                {% if form.amount.errors %}
+                    <div class="text-red-500 text-sm">{{ form.amount.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md">Deposit</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

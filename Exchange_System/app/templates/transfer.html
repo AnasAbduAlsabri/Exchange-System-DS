@@ -1,0 +1,26 @@
+<!-- app/templates/transfer.html -->
+{% extends "_inc.html" %}
+{% block title %}Transfer Money{% endblock %}
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="bg-white p-8 shadow-md rounded-md w-96">
+        <h1 class="text-4xl font-bold mb-8">Transfer Money</h1>
+        <form action="{{ url_for('transfer') }}" method="post">
+            {{ form.csrf_token }}
+
+            <div class="mb-4">
+                {{ form.receiver.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.receiver(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.amount.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.amount(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+
+            <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Transfer</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- في ملف templates/balance.html -->
+{% extends "_inc.html" %}
+
+{% block title %}Balance - Exchange System{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="bg-white p-8 shadow-md rounded-md w-96">
+        <h2 class="text-3xl font-bold mb-4">Your Balance</h2>
+
+        <div class="mb-4">
+            <strong>Username:</strong> {{ current_user.username }}
+        </div>
+
+        <div class="mb-4">
+            <strong>Email:</strong> {{ current_user.email }}
+        </div>
+
+        <div class="mb-4">
+            <strong>Balance:</strong> ${{ current_user.balance | round(2) }}
+        </div>
+
+        <a href="{{ url_for('transfer') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md mb-2 inline-block">Transfer Money</a>
+        <a href="{{ url_for('deposit') }}" class="bg-yellow-500 text-white py-2 px-4 rounded-md inline-block">Deposit Money</a>
+        <a href="{{ url_for('transactions') }}" class="bg-red-500 text-white py-2 px-4 rounded-md inline-block">View Transactions</a>
+    </div>
+</div>
+{% endblock %}

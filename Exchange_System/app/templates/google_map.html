@@ -1,0 +1,30 @@
+<!-- في ملف templates/google_map.html -->
+{% extends "_inc.html" %}
+
+{% block title %}Deposit - Exchange System{% endblock %}
+
+{% block content %}
+
+<!-- إنشاء عنصر div لاستضافة الخريطة -->
+<div id="map" style="height: 100vh; width: 100%;"></div>
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places"></script>
+<script>
+    // داخل علامة script، قم بكتابة الكود لإنشاء الخريطة
+    function initMap() {
+        // إنشاء كائن Map وتحديد الموقع الابتدائي
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 8,
+            
+        });
+
+        
+    }
+
+    // استدعاء initMap عند تحميل الصفحة
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+
+{% endblock %}

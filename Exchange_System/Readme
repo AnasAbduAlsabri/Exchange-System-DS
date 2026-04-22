@@ -1,0 +1,41 @@
+# Exchange System
+
+Exchange System is a web application for currency conversion and transactions.
+
+## Features
+
+- Currency Conversion
+- User Registration and Login
+- Balance Management
+- Transaction History
+- Real-time Notifications for Transfers
+
+## Technologies Used
+
+- Flask
+- Flask-SocketIO
+- Flask-Login
+- Flask-Migrate
+- Flask-WTF
+- python-dotenv
+- SQLAlchemy
+- Zeep
+
+## Getting Started
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/exchange-system.git
+###### Install dependencies
+   pip install -r requirements.txt
+   ###### initalize the database 
+   flask db init
+   flask db migrate -m "initial migration"
+   flask db upgrade
+   ###### Run the application
+   python run.py
+   ###### Open the application in your browser:
+   http://127.0.0.1:5000/
+
+

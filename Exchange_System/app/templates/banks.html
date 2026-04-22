@@ -1,0 +1,25 @@
+<!-- app/templates/login.html -->
+{% extends "_inc.html" %}
+{% block title %}Bank Details{% endblock %}
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="max-w-md bg-white p-8 rounded-md shadow-md">
+        <h1 class="text-4xl font-bold mb-8">Banks Details</h1>
+
+        <form action="{{ url_for('show_banks') }}" method="post">
+            <div class="mb-4">
+                <label for="BanksNo" class="block text-sm font-medium text-gray-600">Enter Bank No</label>
+                <input class="mt-1 p-2 w-full border rounded-md" type="number" name="BanksNo" id="BanksNo">
+            </div>
+            {% if Bank %}
+                <div class="bg-blue-100 rounded p-6 mb-4">
+                    <p class="text-lg  font-bold mb-2">{{ Bank['BankName'] }}</p>
+                </div>
+                {% endif %}
+
+            <button type="submit"
+                class="bg-blue-500 text-white w-full px-4 py-2 rounded-md hover:bg-blue-700">Show</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

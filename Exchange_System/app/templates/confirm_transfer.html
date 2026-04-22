@@ -1,0 +1,19 @@
+<!-- app/templates/confirm_transfer.html -->
+{% extends '_inc.html' %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-4xl font-bold mb-8">Confirm Transfer</h1>
+    <div class="max-w-md mx-auto bg-white p-8 rounded-md">
+        <p class="mb-4">Confirm the details of your transfer:</p>
+        <p><strong>Sender:</strong> {{ transfer.sender }}</p>
+        <p><strong>Receiver:</strong> {{ transfer.receiver }}</p>
+        <p><strong>Amount:</strong> {{ transfer.amount }}</p>
+        <form action="{{ url_for('confirm_transfer') }}" method="post">
+            {{ form.csrf_token }}
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Confirm
+                Transfer</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

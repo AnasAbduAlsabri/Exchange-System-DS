@@ -1,0 +1,31 @@
+<!-- app/templates/register.html -->
+{% extends "_inc.html" %}
+{% block title %}Create an Account{% endblock %}
+{% block content %}
+<div class="container mx-auto p-8 flex justify-center items-center h-screen">
+    <div class="max-w-md bg-white p-8 rounded-md">
+        <h1 class="text-4xl font-bold mb-8">Create an Account</h1>
+        <form action="{{ url_for('register') }}" method="post">
+            {{ form.csrf_token }}
+            <div class="mb-4">
+                {{ form.username.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.username(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <div class="mb-4">
+                {{ form.email.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.email(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <div class="mb-4">
+                {{ form.password.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.password(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <div class="mb-8">
+                {{ form.confirm_password.label(class="block text-sm font-medium text-gray-600") }}
+                {{ form.confirm_password(class="mt-1 p-2 w-full border rounded-md") }}
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create
+                Account</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

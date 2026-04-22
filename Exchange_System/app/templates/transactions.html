@@ -1,0 +1,24 @@
+<!-- في templates/transactions.html -->
+{% extends "_inc.html" %}
+
+{% block title %}Transactions - Exchange System{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8 bg-white shadow-lg rounded-lg mt-8">
+    <h2 class="text-4xl font-bold mb-6 text-center">Your Transactions</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for transfer in transfers %}
+        <div class="bg-blue-100 rounded p-6 mb-4">
+            <p class="text-lg font-bold mb-2">{{ transfer.sender }}</p>
+            <p class="text-gray-700 mb-2">transferred <b>{{ transfer.amount }}$</b> to</p>
+            <p class="text-lg font-bold">{{ transfer.receiver }}</p>
+            <p class="text-gray-500 text-sm mt-2">
+                on {{ transfer.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
