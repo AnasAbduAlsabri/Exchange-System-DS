@@ -1,0 +1,9 @@
+Flask==3.0.0
+Flask-SocketIO==5.3.6
+Flask-Login==0.6.3
+Flask-Migrate==4.0.5
+Flask-WTF==1.2.1
+python-dotenv== 0.19.0
+SQLAlchemy==2.0.23
+zeep==4.2.1
+celery==5.3.6
