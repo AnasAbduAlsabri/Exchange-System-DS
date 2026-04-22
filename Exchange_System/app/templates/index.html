@@ -1,88 +1,159 @@
 <!-- app/templates/index.html -->
 {% extends '_inc.html' %}
-{% block title %}Exchange System{% endblock %}
+{% block title %}Exchange DS - Professional Banking{% endblock %}
 {% block content %}
-<div class="container mx-auto p-4">
-    <h1 class="text-4xl font-bold mb-8">Welcome to Exchange System</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="max-w-6xl mx-auto">
+    <!-- Hero Section -->
+    <header class="text-center mb-16 py-12">
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+            Seamlessly Manage Your <br>
+            <span class="text-accent">Global Finances</span>
+        </h1>
+        <p class="text-xl opacity-80 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Experience the future of currency exchange with real-time transfers, 
+            AI-powered assistance, and multi-currency support.
+        </p>
         {% if not current_user.is_authenticated %}
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Login</h2>
-            <p class="text-gray-600">Already have an account? Login now.</p>
-            <a href="{{ url_for('login') }}"
-                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Login</a>
+        <div class="flex justify-center gap-4">
+            <a href="{{ url_for('register') }}" class="btn-primary px-8 py-4 rounded-xl text-lg shadow-xl">Get Started Now</a>
+            <a href="{{ url_for('login') }}" class="glass-card px-8 py-4 rounded-xl text-lg hover:bg-white/10 transition-colors">Sign In</a>
         </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Create Account</h2>
-            <p class="text-gray-600">Don't have an account? Create one now.</p>
-            <a href="{{ url_for('register') }}"
-                class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Register</a>
-        </div>
-
-   
         {% endif %}
+    </header>
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% if current_user.is_authenticated %}
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Logout</h2>
-            <p class="text-gray-600">Logout from your account? Logout now.</p>
-            <a href="{{ url_for('logout') }}"
-                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Logout</a>
-        </div>
-     
+        <!-- Authorized User Features -->
+        <a href="{{ url_for('transfer') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=80" alt="Transfer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-accent/20 backdrop-blur-md rounded-xl flex items-center justify-center text-accent text-2xl border border-accent/20">⇄</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-accent transition-colors">Transfer Funds</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Execute high-speed international wire transfers across our secure global backbone.</p>
+                <div class="flex items-center gap-2 text-accent font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Initiate Protocol</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
 
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Transfer Money</h2>
-            <p class="text-gray-600">Transfer money to another account.</p>
-            <a href="{{ url_for('transfer') }}"
-                class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700">Transfer</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Deposit Money</h2>
-            <p class="text-gray-600">Deposit money to your account.</p>
-            <a href="{{ url_for('deposit') }}"
-                class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Deposit Money</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Account Balance</h2>
-            <p class="text-gray-600">View your account balance.</p>
-            <a href="{{ url_for('balance') }}"
-                class="mt-4 bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">Balance</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Transactions</h2>
-            <p class="text-gray-600">View  Transactions</p>
-            <a href="{{ url_for('transactions') }}"
-                class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">View Transactions</a>
-        </div>
+        <a href="{{ url_for('deposit') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=1000&q=80" alt="Deposit" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-green-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-green-400 text-2xl border border-green-500/20">↓</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-green-400 transition-colors">Secure Deposit</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Instantly capitalize your portfolio using our multi-layered encrypted payment nodes.</p>
+                <div class="flex items-center gap-2 text-green-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Capitalize Now</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ url_for('balance') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80" alt="Wallet" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-blue-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-blue-400 text-2xl border border-blue-500/20">▣</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-blue-400 transition-colors">Portfolio Overview</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Comprehensive real-time analysis of your digital assets and liquidity status.</p>
+                <div class="flex items-center gap-2 text-blue-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Audit Assets</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ url_for('transactions') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=80" alt="History" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-purple-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-purple-400 text-2xl border border-purple-500/20">☰</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-purple-400 transition-colors">Activity Archive</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Access immutable ledger records and digital receipts for all systemic movements.</p>
+                <div class="flex items-center gap-2 text-purple-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Query Ledger</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
         {% endif %}
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Convert Currency</h2>
-            <p class="text-gray-600">You can con convert from Currency to another</p>
-            <a href="{{ url_for('convert_currency') }}"
-                class="mt-4 bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700">Convert Currency</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Show google Map</h2>
-            <p class="text-gray-600">You can see all places of all banks</p>
-            <a href="{{ url_for('google_map') }}"
-                class="mt-4 bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700">Show google Map</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">Chat With GPT</h2>
-            <p class="text-gray-600">You can chat esially with gpt</p>
-            <a href="{{ url_for('get_chat') }}"
-                class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">New Chat</a>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md transition transform hover:scale-105 duration-300 ease-in-out">
-            <h2 class="text-2xl font-semibold mb-4">See All Avaliable Banks</h2>
-            <p class="text-gray-600">You can see all avaliable banks</p>
-            <a href="{{ url_for('show_banks') }}"
-                class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Show Banks</a>
-        </div>
+
+        <!-- General Features -->
+        <a href="{{ url_for('convert_currency') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1611974717483-9b43728612f0?auto=format&fit=crop&w=1000&q=80" alt="Converter" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-pink-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-pink-400 text-2xl border border-pink-500/20">◈</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-pink-400 transition-colors">Smart Converter</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Institutional-grade exchange parity engine supporting over 150 global ISO currencies.</p>
+                <div class="flex items-center gap-2 text-pink-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Compute Parity</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ url_for('get_chat') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80" alt="AI" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-red-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-red-400 text-2xl border border-red-500/20">◎</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-red-400 transition-colors">AI Financial Hub</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Consult our neural-network based assistant for strategic portfolio insights.</p>
+                <div class="flex items-center gap-2 text-red-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Engage AI</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ url_for('show_banks') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80" alt="Banks" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-yellow-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-yellow-400 text-2xl border border-yellow-500/20">🏛</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-yellow-400 transition-colors">Partner Network</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Verified institutional directory of our physical banking nodes and partner branches.</p>
+                <div class="flex items-center gap-2 text-yellow-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Map Partners</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
         
-        <!-- Add more services as needed -->
+        <a href="{{ url_for('google_map') }}" class="glass-card group overflow-hidden rounded-[2.5rem]">
+            <div class="h-48 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1556742049-02e45f951835?auto=format&fit=crop&w=1000&q=80" alt="ATM" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161f34] via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-6 w-12 h-12 bg-emerald-500/20 backdrop-blur-md rounded-xl flex items-center justify-center text-emerald-400 text-2xl border border-emerald-500/20">📍</div>
+            </div>
+            <div class="p-8 pt-4">
+                <h3 class="text-2xl font-bold mb-3 tracking-tight group-hover:text-emerald-400 transition-colors">ATM Locator</h3>
+                <p class="opacity-70 mb-6 leading-relaxed text-sm">Precision GPS mapping of high-liquidity cash points within our global footprint.</p>
+                <div class="flex items-center gap-2 text-emerald-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <span>Deploy GPS</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </div>
+        </a>
     </div>
 </div>
-
 {% endblock %}

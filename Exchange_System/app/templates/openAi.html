@@ -1,39 +1,109 @@
 <!-- app/templates/openAi.html -->
-{% extends '_inc.html' %}
-{% block title %}Chat with GPT-3.5 Turbo{% endblock %}
+{% extends "_inc.html" %}
+{% block title %}AI Financial Hub - Exchange DS{% endblock %}
 {% block content %}
-<div class="bg-gray-100 p-4">
-    <div class="max-w-xl mx-auto bg-white p-8 rounded shadow">
-        <h1 class="text-2xl font-bold mb-4">Chat with GPT-3.5 Turbo</h1>
-
-        <!-- User message input -->
-        <div class="mb-4">
-            <label for="userMessage" class="block text-sm font-medium text-gray-600">Your message:</label>
-            <input type="text" id="userMessage" name="userMessage"
-                class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+<div class="max-w-5xl mx-auto py-8 animate-fade-in flex flex-col h-[calc(100vh-180px)]">
+    <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center text-red-400 text-2xl shadow-lg border border-red-500/20">◎</div>
+        <div>
+            <h2 class="text-3xl font-extrabold tracking-tight italic">AI Financial <span class="text-accent">Hub</span></h2>
+            <p class="text-sm opacity-50 font-bold uppercase tracking-widest leading-none mt-1">Institutional GPT-3.5 Assistant</p>
         </div>
-
-        <!-- Display GPT-3.5 Turbo response -->
-        <div id="response" class="text-gray-800"></div>
-
-        <!-- Submit button -->
-        <button id="submitButton"
-            class="mt-4 bg-purple-500 text-white p-2 rounded hover:bg-purple-700 focus:outline-none focus:ring focus:border-blue-300">
-            Send Message
-        </button>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#submitButton").click(function () {
-                var userMessage = $("#userMessage").val();
+    <div class="glass-card flex-1 rounded-3xl shadow-2xl overflow-hidden flex flex-col relative">
+        <!-- Chat Area -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin scrollbar-thumb-white/10">
+            <div class="flex gap-4 animate-fade-in">
+                <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 shrink-0 border border-red-500/10">◎</div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-5 max-w-[80%] shadow-lg">
+                    <p class="text-sm leading-relaxed">Greetings. I am your specialized financial intelligence assistant. How may I assist your portfolio management or market analysis today?</p>
+                </div>
+            </div>
+        </div>
 
-                $.post("/get_chat_response", { user_message: userMessage }, function (data) {
-                    $("#response").text(data.response);
-                });
+        <!-- Input Area -->
+        <div class="p-6 bg-black/20 border-t border-white/10">
+            <form id="chat-form" class="flex gap-4 relative group">
+                <input type="text" id="user-message" 
+                    class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-all text-lg placeholder:opacity-30 italic font-medium" 
+                    placeholder="Inquire about market trends, account management, or system features...">
+                <button type="submit" class="btn-primary px-8 rounded-2xl shadow-xl font-black uppercase tracking-widest text-sm flex items-center gap-2 group overflow-hidden">
+                    <span class="relative z-10">Transmit</span>
+                    <span class="relative z-10 opacity-40 group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    <div class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                </button>
+            </form>
+            <p class="text-[10px] opacity-30 mt-4 text-center font-bold uppercase tracking-[0.2em]">End-to-End Encrypted AI Session • Secure Data Protocol</p>
+        </div>
+
+        <!-- Loading Indicator (Hidden) -->
+        <div id="chat-loading" class="hidden absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+                <p class="text-xs font-bold uppercase tracking-widest text-accent animate-pulse">Processing Query...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#chat-form').submit(function (e) {
+            e.preventDefault();
+            const message = $('#user-message').val().trim();
+            if (!message) return;
+
+            // Append User Message
+            $('#chat-messages').append(`
+                <div class="flex gap-4 justify-end animate-fade-in">
+                    <div class="bg-accent/10 border border-accent/20 rounded-2xl rounded-tr-none p-5 max-w-[80%] shadow-lg">
+                        <p class="text-sm leading-relaxed text-white font-medium italic">${message}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-dark font-black shrink-0 shadow-lg text-lg italic">
+                        {{ current_user.username[0]|upper }}
+                    </div>
+                </div>
+            `);
+
+            $('#user-message').val('');
+            $('#chat-loading').removeClass('hidden');
+            
+            // Scroll to bottom
+            const chatLog = document.getElementById('chat-messages');
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('get_chat_response') }}",
+                data: { user_message: message },
+                success: function (data) {
+                    $('#chat-loading').addClass('hidden');
+                    $('#chat-messages').append(`
+                        <div class="flex gap-4 animate-fade-in">
+                            <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 shrink-0 border border-red-500/10 shadow-lg">◎</div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-5 max-w-[80%] shadow-lg">
+                                <p class="text-sm leading-relaxed">${data.response}</p>
+                            </div>
+                        </div>
+                    `);
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                },
+                error: function() {
+                    $('#chat-loading').addClass('hidden');
+                    $('#chat-messages').append(`
+                        <div class="flex gap-4 animate-fade-in">
+                            <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 shrink-0 border border-red-500/10 shadow-lg">◎</div>
+                            <div class="bg-red-500/10 border border-red-500/20 rounded-2xl rounded-tl-none p-5 max-w-[80%] shadow-lg">
+                                <p class="text-sm leading-relaxed text-red-400 font-bold uppercase tracking-widest text-xs italic">System Error: Connectivity to AI Hub failed. Check API Protocol.</p>
+                            </div>
+                        </div>
+                    `);
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                }
             });
         });
-    </script>
-</div>
+    });
+</script>
 {% endblock %}

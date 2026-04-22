@@ -5,7 +5,7 @@ from flask_login import UserMixin
 from datetime import datetime
 from sqlalchemy import event
 
-from .run import db
+from . import db
 
 
 class User(db.Model, UserMixin):

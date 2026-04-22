@@ -2,7 +2,8 @@
 import os
 from flask import jsonify, render_template, redirect, url_for, flash, request, session
 import zeep
-from .run import db, app, socketio, openai_client
+from . import db, app, socketio, openai_client
+from .socket_routes import user_sids
 from .forms import (
     RegistrationForm,
     LoginForm,
@@ -142,11 +143,11 @@ def transfer():
         session["transfer_data"] = {
             "sender": current_user.username,
             "receiver": destination_user.username,
-            "recipient_sid": "session.get()",
+            "recipient_sid": user_sids.get(destination_user.username),
             "amount": float(form.amount.data),
         }
 
-        print("//////////////////////////////////Recipient SID:", session.get("sid"))
+        print("//////////////////////////////////Recipient SID:", session.get("recipient_sid"))
         return redirect(url_for("confirm_transfer"))
     return render_template("transfer.html", form=form)
 
@@ -178,18 +179,26 @@ def confirm_transfer():
     )
     db.session.add(transfer)
     db.session.commit()
-    # استخدام رقم جلسة العميل المستهدف من الجلسة
-    recipient_sid = session.get("recipient_sid")
     # إرسال إشعار إلى العميل الذي تم تحويل الأموال إليه
-    socketio.emit(
-        "transfer_notification",
-        {"message": "Transfer successful!"},
-    )
+    recipient_sid = transfer_data.get("recipient_sid")
+    if recipient_sid:
+        socketio.emit(
+            "transfer_notification",
+            {"message": f"You received ${amount} from {transfer_data['sender']}!"},
+            room=recipient_sid
+        )
+    else:
+        # Fallback or general notification
+        socketio.emit(
+            "transfer_notification",
+            {"message": "A transfer was completed."},
+        )
 
     # إزالة بيانات التحويل من الجلسة بمجرد تحميلها
     session.pop("transfer_data", None)
     flash("Transfer confirmed!", "success")
     return render_template("index.html")
+
 
 
 @app.route("/complete_transfer", methods=["POST"])
@@ -236,7 +245,7 @@ def convert_currency():
 
         try:
             # تحديد عنوان WSDL
-            wsdl_path = "../FxtopServices.wsdl"
+            wsdl_path = os.path.join(os.path.dirname(__file__), "..", "FxtopServices.wsdl")
 
             # إنشاء عميل Zeep
             client = zeep.Client(wsdl=wsdl_path)
@@ -270,19 +279,23 @@ def get_chat():
 def get_chat_response():
     user_message = request.form["user_message"]
 
-    # Send user message to OpenAI for chat completion
-    stream = openai_client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": user_message}],
-        stream=True,
-    )
+    try:
+        # Send user message to OpenAI for chat completion
+        stream = openai_client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": user_message}],
+            stream=True,
+        )
 
-    response = ""
-    for chunk in stream:
-        if chunk.choices[0].delta.content is not None:
-            response += chunk.choices[0].delta.content
+        response = ""
+        for chunk in stream:
+            if chunk.choices[0].delta.content is not None:
+                response += chunk.choices[0].delta.content
 
-    return jsonify({"response": response})
+        return jsonify({"response": response})
+    except Exception as e:
+        print(f"OpenAI Error: {e}")
+        return jsonify({"response": f"Error: {str(e)}"}), 500
 
 
 @app.route("/show_banks", methods=["GET"])

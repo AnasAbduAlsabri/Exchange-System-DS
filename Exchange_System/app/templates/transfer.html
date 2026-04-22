@@ -1,25 +1,57 @@
 <!-- app/templates/transfer.html -->
 {% extends "_inc.html" %}
-{% block title %}Transfer Money{% endblock %}
+{% block title %}Initiate Transfer - Exchange DS{% endblock %}
 {% block content %}
-<div class="container mx-auto p-8 flex justify-center items-center h-screen">
-    <div class="bg-white p-8 shadow-md rounded-md w-96">
-        <h1 class="text-4xl font-bold mb-8">Transfer Money</h1>
-        <form action="{{ url_for('transfer') }}" method="post">
+<div class="max-w-xl mx-auto py-12 animate-fade-in">
+    <div class="glass-card p-10 rounded-3xl shadow-2xl">
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-accent text-3xl group-hover:scale-110 transition-transform">⇄</div>
+            <h1 class="text-3xl font-bold mb-2 tracking-tight">Initiate Transfer</h1>
+            <p class="opacity-60 text-lg">Send funds globally within the Exchange DS network</p>
+        </div>
+
+        <form action="{{ url_for('transfer') }}" method="post" class="space-y-6">
             {{ form.csrf_token }}
 
-            <div class="mb-4">
-                {{ form.receiver.label(class="block text-sm font-medium text-gray-600") }}
-                {{ form.receiver(class="mt-1 p-2 w-full border rounded-md") }}
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                <p class="text-xs font-bold uppercase tracking-widest opacity-50 mb-4">Sender Details</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-dark font-bold text-lg">
+                        {{ current_user.username[0]|upper }}
+                    </div>
+                    <div>
+                        <p class="font-bold tracking-tight">{{ current_user.username }}</p>
+                        <p class="text-sm opacity-60">Verified Personal Account</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-4">
-                {{ form.amount.label(class="block text-sm font-medium text-gray-600") }}
-                {{ form.amount(class="mt-1 p-2 w-full border rounded-md") }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold mb-2 opacity-80 uppercase tracking-wider" for="receiver">Receiver Username</label>
+                    {{ form.receiver(class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-all", placeholder="Username") }}
+                    {% if form.receiver.errors %}
+                        <p class="text-red-400 text-xs mt-1 font-medium">{{ form.receiver.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2 opacity-80 uppercase tracking-wider" for="amount">Amount ($)</label>
+                    {{ form.amount(class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-all font-bold text-lg", placeholder="0.00") }}
+                    {% if form.amount.errors %}
+                        <p class="text-red-400 text-xs mt-1 font-medium">{{ form.amount.errors[0] }}</p>
+                    {% endif %}
+                </div>
             </div>
 
-            <button type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Transfer</button>
+            <div class="p-4 rounded-xl bg-accent/5 border border-accent/10 flex items-start gap-3">
+                <span class="text-accent text-lg">◈</span>
+                <p class="text-sm opacity-70">A processing fee of 0.00% will be applied. Transfers are final once confirmed.</p>
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 group">
+                <span class="group-hover:translate-x-1 transition-transform tracking-tight">Review Transfer Detail</span>
+                <span>&rarr;</span>
+            </button>
         </form>
     </div>
 </div>

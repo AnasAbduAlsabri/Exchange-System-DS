@@ -1,29 +1,45 @@
-<!-- في ملف templates/deposit.html -->
+<!-- app/templates/deposit.html -->
 {% extends "_inc.html" %}
-
-{% block title %}Deposit - Exchange System{% endblock %}
-
+{% block title %}Secure Deposit - Exchange DS{% endblock %}
 {% block content %}
-<div class="container mx-auto p-8 flex justify-center items-center h-screen">
-    <div class="bg-white p-8 shadow-md rounded-md w-96">
-        <h2 class="text-3xl font-bold mb-4">Deposit Money</h2>
+<div class="max-w-md mx-auto py-12 animate-fade-in">
+    <div class="glass-card p-10 rounded-3xl shadow-2xl">
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-green-400 text-3xl">↓</div>
+            <h2 class="text-3xl font-bold mb-2 tracking-tight">Add Funds</h2>
+            <p class="opacity-60">Instantly reload your digital wallet portfolio</p>
+        </div>
 
-        <form method="post">
+        <form method="post" class="space-y-6">
             {{ form.csrf_token }}
 
-            <div class="mb-4">
-                <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">Amount</label>
-                <input type="text" id="amount" name="amount" class="w-full p-2 border rounded-md" value="{{ form.amount.data }}">
-
+            <div>
+                <label for="amount" class="block text-sm font-semibold mb-2 opacity-80 uppercase tracking-wider">Deposit Amount ($)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl opacity-40">$</span>
+                    <input type="number" step="0.01" id="amount" name="amount" 
+                        class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-4 text-2xl font-bold focus:outline-none focus:border-green-500 transition-all" 
+                        value="{{ form.amount.data or '' }}" placeholder="0.00">
+                </div>
                 {% if form.amount.errors %}
-                    <div class="text-red-500 text-sm">{{ form.amount.errors[0] }}</div>
+                    <p class="text-red-400 text-sm mt-2 font-medium">! {{ form.amount.errors[0] }}</p>
                 {% endif %}
             </div>
 
-            <div class="mb-4">
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md">Deposit</button>
+            <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 flex gap-4 items-center">
+                <div class="text-blue-400 text-xl font-bold">ⓘ</div>
+                <p class="text-sm opacity-80 italic">Funds will be credited instantly to your account after verification.</p>
             </div>
+
+            <button type="submit" class="btn-primary w-full py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 group">
+                <span class="group-hover:scale-110 transition-transform">✓</span> 
+                Authorize Deposit
+            </button>
         </form>
+
+        <p class="text-center mt-8 text-sm opacity-60">
+            Need help? <a href="{{ url_for('get_chat') }}" class="text-accent font-semibold hover:underline">Chat with AI Support</a>
+        </p>
     </div>
 </div>
 {% endblock %}

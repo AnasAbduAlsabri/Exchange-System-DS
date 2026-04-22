@@ -1,48 +1,83 @@
-<!-- app/templates/_base.html -->
+<!-- app/templates/_inc.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Exchange System{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-
-<body class="bg-gray-100 font-sans">
-    <!-- في ملف HTML الخاص بتطبيقك -->
-
-
-
-    {% block content %}{% endblock %}
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-
-
-    {% if messages %}
-    <div class="flex items-center justify-center">
-        {% for category, message in messages %}
-        <div class="flash-message-{{ category }}">
-            {{ message }}
+<body>
+    <nav class="glass-card sticky top-0 z-50 px-6 py-4 mb-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold flex items-center gap-2">
+                <span class="text-accent">◈</span>
+                <span class="tracking-tight">EXCHANGE<span class="text-accent">DS</span></span>
+            </a>
+            
+            <div class="flex items-center gap-6">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('balance') }}" class="hover:text-accent transition-colors">Balance: <span class="font-bold text-accent">${{ "%.2f"|format(current_user.balance) }}</span></a>
+                <a href="{{ url_for('logout') }}" class="text-sm opacity-70 hover:opacity-100 transition-opacity">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="hover:text-accent transition-colors">Login</a>
+                <a href="{{ url_for('register') }}" class="btn-primary px-5 py-2 rounded-full text-sm">Join Now</a>
+                {% endif %}
+                
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Default Dark Icon -->
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
+    </nav>
+
+    <main class="container mx-auto px-4 pb-12 animate-fade-in">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="max-w-2xl mx-auto mb-8">
+                {% for category, message in messages %}
+                <div class="flash-message flash-message-{{ category }} flex items-center gap-3">
+                    <span class="font-bold">{% if category == 'success' %}✓{% else %}!{% endif %}</span>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
     <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-        socket.on('transfer_notification', function (data) {
-            alert('Transfer Notification:', data.message);
-            // قم بتحديث واجهة المستخدم أو إظهار إشعار تنبيه
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         });
-        socket.on('all_transfer_notification', function (data) {
-            alert('Transfer Notification:',data.message, data.transfer,);
-            // قم بتحديث واجهة المستخدم أو إظهار إشعار تنبيه
+
+        // Persistent Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+
+        // Socket.io
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('transfer_notification', function (data) {
+            console.log('Transfer Notification:', data.message);
         });
     </script>
 </body>
-
 </html>

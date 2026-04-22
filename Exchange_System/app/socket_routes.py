@@ -2,33 +2,18 @@
 from flask import request, session
 from . import socketio
 from flask_socketio import send, emit
+from flask_login import current_user
 
-
-# @socketio.on("transfer_notification")
-# def handle_transfer_notification(data):
-#     print("Transfer Notification:", data["message"])
-#     # استلام رقم جلسة العميل المستهدف
-#     recipient_sid = request.sid
-#     print("/////////-----------------///////////", request.sid)
-#     # إرسال الإشعار إلى العميل المستهدف
-#     emit("response", {"data": "Transfer successful!"}, room=recipient_sid)
-
+# Global dictionary to map usernames to SIDs
+user_sids = {}
 
 @socketio.on("connect")
 def handle_connect():
-    # عندما يتصل العميل بالخادم
+    if current_user.is_authenticated:
+        user_sids[current_user.username] = request.sid
     session["sid"] = request.sid
 
-
-def ack():
-    print("message was received!")
-
-
-# @socketio.on("transfer_notification")
-# def handle_transfer_notification(json):
-#     emit("response", json, callback=ack)
-
-
-# @socketio.on("all_transfer_notification")
-# def handle_all_transfer_notification(json):
-#     emit("response", json, callback=ack)
+@socketio.on("disconnect")
+def handle_disconnect():
+    if current_user.is_authenticated:
+        user_sids.pop(current_user.username, None)

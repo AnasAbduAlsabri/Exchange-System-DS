@@ -1,19 +1,57 @@
 <!-- app/templates/confirm_transfer.html -->
 {% extends '_inc.html' %}
-
+{% block title %}Confirm Transaction - Exchange DS{% endblock %}
 {% block content %}
-<div class="container mx-auto p-4">
-    <h1 class="text-4xl font-bold mb-8">Confirm Transfer</h1>
-    <div class="max-w-md mx-auto bg-white p-8 rounded-md">
-        <p class="mb-4">Confirm the details of your transfer:</p>
-        <p><strong>Sender:</strong> {{ transfer.sender }}</p>
-        <p><strong>Receiver:</strong> {{ transfer.receiver }}</p>
-        <p><strong>Amount:</strong> {{ transfer.amount }}</p>
-        <form action="{{ url_for('confirm_transfer') }}" method="post">
-            {{ form.csrf_token }}
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Confirm
-                Transfer</button>
-        </form>
+<div class="max-w-2xl mx-auto py-12 animate-fade-in">
+    <div class="glass-card p-12 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+        
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold mb-3 tracking-tight">Review Transaction</h1>
+            <p class="opacity-60 text-lg italic">Please verify the transfer details carefully</p>
+        </div>
+
+        <div class="space-y-8 bg-white/5 p-8 rounded-2xl border border-white/10 mb-10">
+            <div class="flex items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-bold text-xl">{{ transfer.sender[0]|upper }}</div>
+                    <div>
+                        <p class="text-xs uppercase tracking-widest opacity-40 font-bold mb-1">Sender</p>
+                        <p class="text-xl font-bold tracking-tight text-accent">{{ transfer.sender }}</p>
+                    </div>
+                </div>
+                <div class="text-3xl opacity-20">➜</div>
+                <div class="flex items-center gap-4 text-right">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest opacity-40 font-bold mb-1 text-right">Receiver</p>
+                        <p class="text-xl font-bold tracking-tight text-accent">{{ transfer.receiver }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-bold text-xl">{{ transfer.receiver[0]|upper }}</div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/10 text-center">
+                <p class="text-xs uppercase tracking-widest opacity-40 font-bold mb-2">Total Transfer Amount</p>
+                <p class="text-6xl font-black tracking-tighter text-white">
+                    <span class="text-accent text-3xl font-medium opacity-80 mr-1">$</span>{{ "%.2f"|format(transfer.amount) }}
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="{{ url_for('transfer') }}" class="glass-card py-4 rounded-xl font-bold text-center hover:bg-white/10 transition-colors border-white/10">
+                &larr; Cancel & Edit
+            </a>
+            <form action="{{ url_for('confirm_transfer') }}" method="post">
+                {{ form.csrf_token }}
+                <button type="submit" class="btn-primary w-full py-4 rounded-xl shadow-lg font-bold flex items-center justify-center gap-2 group">
+                    <span class="group-hover:scale-110 transition-transform">✓</span>
+                    Confirm Payment
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center mt-8 text-xs opacity-40 uppercase tracking-widest font-bold">Secure Encrypted Transaction</p>
     </div>
 </div>
 {% endblock %}
